@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facebook Ads Simulator</title>
+    <style>
+        /* Auth System Styles */
+        #auth-container {
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+
+        .auth-form {
+            display: none;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        .auth-form.active {
+            display: block;
+            animation: slideUp 0.4s ease;
+        }
+
+        .auth-form input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .auth-form button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 15px;
+            background: #1877f2;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .auth-form a {
+            color: #1877f2;
+            text-decoration: none;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Game Styles */
+        .game-container {
+            display: none;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .status-bar {
+            display: flex;
+            gap: 30px;
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .progress-bar {
+            width: 100px;
+            height: 8px;
+            background: #e4e6eb;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #1877f2;
+            transition: width 0.5s ease;
+        }
+
+        .screen {
+            display: none;
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .screen.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .fb-button {
+            background: #1877f2;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ... (include all previous game styles) ... */
+    </style>
+</head>
+<body>
+    <!-- Auth System -->
+    <div id="auth-container" class="active">
+        <div class="auth-form active" id="login-form">
+            <h2>Login</h2>
+            <input type="text" id="login-username" placeholder="Username">
+            <input type="password" id="login-password" placeholder="Password">
+            <button onclick="login()">Login</button>
+            <p>Don't have an account? <a href="#" onclick="showRegister()">Register</a></p>
+        </div>
+
+        <div class="auth-form" id="register-form">
+            <h2>Register</h2>
+            <input type="text" id="register-username" placeholder="Username">
+            <input type="password" id="register-password" placeholder="Password">
+            <button onclick="register()">Create Account</button>
+            <p>Already have an account? <a href="#" onclick="showLogin()">Login</a></p>
+        </div>
+    </div>
+
+    <!-- Game Container -->
+    <div class="game-container">
+        <div class="header">
+            <div class="fb-logo">Facebook Ads Manager</div>
+            <div class="status-bar">
+                <div class="status-item">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="budget-progress"></div>
+                    </div>
+                    <span>$<span id="current-budget">100.00</span></span>
+                </div>
+                <div class="status-item">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="leads-progress"></div>
+                    </div>
+                    <span>Leads: <span id="current-leads">0</span>/50</span>
+                </div>
+                <div class="status-item">Day: <span id="current-day">1</span></div>
+            </div>
+        </div>
+
+        <!-- Game Screens -->
+        <div id="task-screen" class="screen active">
+            <div class="task-card">
+                <h2>📌 Current Objective</h2>
+                <p id="current-task">Generate 50 leads within 7 days</p>
+                <button class="fb-button" onclick="startGame()">Start Campaign</button>
+            </div>
+        </div>
+
+        <div id="campaign-screen" class="screen">
+            <div class="campaign-flow"></div>
+        </div>
+
+        <div id="results-screen" class="screen">
+            <div class="results-card">
+                <div class="loading-animation" id="results-loader">
+                    <div class="loader"></div>
+                    <p>Analyzing campaign performance...</p>
+                </div>
+                <div class="results-content" style="display: none;">
+                    <h2>Campaign Results</h2>
+                    <div class="metrics-grid"></div>
+                    <div class="feedback-message"></div>
+                    <button class="fb-button" onclick="continueCampaign()">Next Campaign</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Authentication System
+        class User {
+            constructor(username, password) {
+                this.username = username;
+                this.password = password;
+                this.gameState = {
+                    budget: 100,
+                    leads: 0,
+                    day: 1,
+                    totalSpent: 0,
+                    gameOver: false
+                };
+            }
+        }
+
+        let currentUser = null;
+        let users = JSON.parse(localStorage.getItem('users')) || [];
+        const TASKS = ["Generate 50 leads within 7 days"];
+
+        function showRegister() {
+            document.getElementById('login-form').classList.remove('active');
+            document.getElementById('register-form').classList.add('active');
+        }
+
+        function showLogin() {
+            document.getElementById('register-form').classList.remove('active');
+            document.getElementById('login-form').classList.add('active');
+        }
+
+        function register() {
+            const username = document.getElementById('register-username').value;
+            const password = document.getElementById('register-password').value;
+
+            if (users.some(user => user.username === username)) {
+                alert('Username already exists!');
+                return;
+            }
+
+            const newUser = new User(username, password);
+            users.push(newUser);
+            localStorage.setItem('users', JSON.stringify(users));
+            alert('Registration successful! Please login.');
+            showLogin();
+        }
+
+        function login() {
+            const username = document.getElementById('login-username').value;
+            const password = document.getElementById('login-password').value;
+            const user = users.find(u => u.username === username && u.password === password);
+
+            if (user) {
+                currentUser = user;
+                loadGame();
+                document.getElementById('auth-container').classList.remove('active');
+                document.querySelector('.game-container').style.display = 'block';
+            } else {
+                alert('Invalid credentials!');
+            }
+        }
+
+        // Game System
+        function loadGame() {
+            if (!currentUser) return;
+            updateUI();
+            document.getElementById('current-task').textContent = TASKS[0];
+        }
+
+        function saveGame() {
+            if (currentUser) {
+                currentUser.gameState = {
+                    budget: parseFloat(document.getElementById('current-budget').textContent),
+                    leads: parseInt(document.getElementById('current-leads').textContent),
+                    day: parseInt(document.getElementById('current-day').textContent),
+                    gameOver: false
+                };
+                localStorage.setItem('users', JSON.stringify(users));
+            }
+        }
+
+        function updateUI() {
+            if (!currentUser) return;
+            
+            document.getElementById('current-budget').textContent = currentUser.gameState.budget.toFixed(2);
+            document.getElementById('current-leads').textContent = currentUser.gameState.leads;
+            document.getElementById('current-day').textContent = currentUser.gameState.day;
+            
+            document.getElementById('budget-progress').style.width = 
+                Math.min((currentUser.gameState.budget / 100) * 100, 100) + '%';
+            
+            document.getElementById('leads-progress').style.width = 
+                Math.min((currentUser.gameState.leads / 50) * 100, 100) + '%';
+        }
+
+        // ... (include all previous game functions from the last answer) ...
+
+        // Initialize the game
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelector('.game-container').style.display = 'none';
+        });
+    </script>
+</body>
+</html>
