@@ -4,58 +4,70 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Facebook Ads Simulator</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-    <!-- Game Container -->
     <div class="game-container">
-        <!-- Header Component -->
-        <header class="game-header">
+        <div class="header">
+            <div class="logo">
+                <img src="img/logo.png" alt="Facebook Ads Simulator Logo">
+            </div>
             <div class="status-bar">
                 <div class="status-item">
+                    <div class="icon"><img src="img/icons/budget.svg" alt="Budget Icon"></div>
                     <div class="progress-bar">
                         <div class="progress-fill" id="budget-progress"></div>
                     </div>
                     <span>$<span id="current-budget">100.00</span></span>
                 </div>
                 <div class="status-item">
+                    <div class="icon"><img src="img/icons/leads.svg" alt="Leads Icon"></div>
                     <div class="progress-bar">
                         <div class="progress-fill" id="leads-progress"></div>
                     </div>
                     <span>Leads: <span id="current-leads">0</span>/50</span>
                 </div>
-                <div class="status-item">Day: <span id="current-day">1</span></div>
+                <div class="status-item">
+                    <div class="icon"><img src="img/icons/calendar.svg" alt="Calendar Icon"></div>
+                    <span>Day: <span id="current-day">1</span></span>
+                </div>
             </div>
-        </header>
+        </div>
 
-        <!-- Screen Components -->
-        <main class="game-screens">
-            <!-- Task Screen -->
-            <section id="task-screen" class="screen active">
-                <div class="task-card">
-                    <h2>📌 Current Objective</h2>
-                    <p>Generate 50 leads within 7 days</p>
-                    <button class="btn-primary" onclick="startGame()">Start Campaign</button>
-                </div>
-            </section>
+        <div id="onboarding-screen" class="screen active">
+            <div class="onboarding-card">
+                <h2>📣 Welcome to Facebook Ads Simulator!</h2>
+                <p>In this game, you'll take on the role of a Facebook Ads Manager. Your objective is to generate 50 leads within 7 days while managing your budget effectively.</p>
+                <p>You'll go through the process of setting up ad campaigns, targeting the right audience, and crafting compelling ad creatives. Monitor your campaign performance and make adjustments to optimize your results.</p>
+                <button class="fb-button" id="start-game">Start Game</button>
+            </div>
+        </div>
 
-            <!-- Campaign Setup Screen -->
-            <section id="campaign-screen" class="screen">
-                <div class="campaign-flow"></div>
-            </section>
+        <div id="campaign-screen" class="screen">
+            <div class="campaign-flow"></div>
+        </div>
 
-            <!-- Results Screen -->
-            <section id="results-screen" class="screen">
-                <div class="results-card">
-                    <h2>Campaign Results</h2>
-                    <div class="metrics-grid"></div>
-                    <div class="feedback-message"></div>
-                    <button class="btn-primary" onclick="continueCampaign()">Next Campaign</button>
-                </div>
-            </section>
-        </main>
+        <div id="results-screen" class="screen">
+            <div class="results-card">
+                <h2>📊 Campaign Results</h2>
+                <div class="metrics-grid"></div>
+                <div class="feedback-message"></div>
+                <button class="fb-button" id="continue-campaign">Next Campaign</button>
+            </div>
+        </div>
+
+        <div id="game-over-screen" class="screen">
+            <div class="game-over-card">
+                <h2>🏆 Game Over!</h2>
+                <p id="game-over-message"></p>
+                <button class="fb-button" id="restart-game">Restart Game</button>
+            </div>
+        </div>
     </div>
 
-    <script src="game.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/campaign.js"></script>
+    <script src="js/results.js"></script>
+    <script src="js/animations.js"></script>
 </body>
 </html>
