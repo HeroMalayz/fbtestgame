@@ -19,4 +19,7 @@ function showResults(results) {
     `;
     
     showScreen('results-screen');
+
+document.querySelector('.feedback-message').textContent = message;
+    showScreen('results-screen');
 }
