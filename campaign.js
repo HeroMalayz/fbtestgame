@@ -95,3 +95,20 @@ function runCampaign() {
     showResults(results);
     updateUI();
 }
+
+
+// ... campaign creation steps ...
+
+function runCampaign() {
+    // ... campaign performance calculation ...
+
+    if (gameState.leads >= 50) {
+        gameState.gameOver = true;
+        showResults(results, 'Congratulations! You reached the goal and generated 50 leads within the given timeframe and budget.');
+    } else if (gameState.budget < 5 || gameState.day > 7) {
+        gameState.gameOver = true;
+        showResults(results, 'Game Over! You didn\'t reach the goal of generating 50 leads within the given timeframe and budget.');
+    } else {
+        showResults(results, 'Great job! Keep optimizing your campaigns to reach the goal.');
+    }
+}
