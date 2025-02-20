@@ -41,3 +41,45 @@ document.getElementById('continue-campaign').addEventListener('click', () => {
 
 // Initialize the game
 updateUI();
+
+function showScreen(screenId) {
+    document.querySelectorAll('.screen').forEach(screen => {
+        screen.classList.remove('active');
+        screen.classList.add('fade-out');
+    });
+    
+    setTimeout(() => {
+        document.getElementById(screenId).classList.add('active');
+        document.getElementById(screenId).classList.remove('fade-out');
+    }, 300);
+}
+
+document.getElementById('start-game').addEventListener('click', () => {
+    showScreen('campaign-screen');
+    showCampaignStep('setup');
+});
+
+document.getElementById('continue-campaign').addEventListener('click', () => {
+    if (gameState.gameOver) {
+        showScreen('game-over-screen');
+    } else {
+        showScreen('campaign-screen');
+        showCampaignStep('setup');
+    }
+});
+
+document.getElementById('restart-game').addEventListener('click', () => {
+    resetGame();
+    showScreen('onboarding-screen');
+});
+
+function resetGame() {
+    gameState.budget = 100;
+    gameState.leads = 0;
+    gameState.day = 1;
+    gameState.totalSpent = 0;
+    gameState.gameOver = false;
+    updateUI();
+}
+
+// ... campaign creation and game over logic ...
