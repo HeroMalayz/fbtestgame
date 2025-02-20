@@ -4,33 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Facebook Ads Simulator</title>
-    <link rel="stylesheet" href="auth.css">
-    <link rel="stylesheet" href="game.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- Auth Container -->
-    <div id="auth-container" class="active">
-        <div class="auth-form active" id="login-form">
-            <h2>Login</h2>
-            <input type="text" id="login-username" placeholder="Username">
-            <input type="password" id="login-password" placeholder="Password">
-            <button onclick="login()">Login</button>
-            <p>Don't have an account? <a href="#" onclick="showRegister()">Register</a></p>
-        </div>
-
-        <div class="auth-form" id="register-form">
-            <h2>Register</h2>
-            <input type="text" id="register-username" placeholder="Username">
-            <input type="password" id="register-password" placeholder="Password">
-            <button onclick="register()">Create Account</button>
-            <p>Already have an account? <a href="#" onclick="showLogin()">Login</a></p>
-        </div>
-    </div>
-
     <!-- Game Container -->
     <div class="game-container">
-        <div class="header">
-            <div class="fb-logo">Facebook Ads Manager</div>
+        <!-- Header Component -->
+        <header class="game-header">
             <div class="status-bar">
                 <div class="status-item">
                     <div class="progress-bar">
@@ -46,38 +26,36 @@
                 </div>
                 <div class="status-item">Day: <span id="current-day">1</span></div>
             </div>
-        </div>
+        </header>
 
-        <!-- Game Screens -->
-        <div id="task-screen" class="screen active">
-            <div class="task-card">
-                <h2>📌 Current Objective</h2>
-                <p id="current-task">Generate 50 leads within 7 days</p>
-                <button class="fb-button" onclick="startGame()">Start Campaign</button>
-            </div>
-        </div>
-
-        <div id="campaign-screen" class="screen">
-            <div class="campaign-flow"></div>
-        </div>
-
-        <div id="results-screen" class="screen">
-            <div class="results-card">
-                <div class="loading-animation" id="results-loader">
-                    <div class="loader"></div>
-                    <p>Analyzing campaign performance...</p>
+        <!-- Screen Components -->
+        <main class="game-screens">
+            <!-- Task Screen -->
+            <section id="task-screen" class="screen active">
+                <div class="task-card">
+                    <h2>📌 Current Objective</h2>
+                    <p>Generate 50 leads within 7 days</p>
+                    <button class="btn-primary" onclick="startGame()">Start Campaign</button>
                 </div>
-                <div class="results-content" style="display: none;">
+            </section>
+
+            <!-- Campaign Setup Screen -->
+            <section id="campaign-screen" class="screen">
+                <div class="campaign-flow"></div>
+            </section>
+
+            <!-- Results Screen -->
+            <section id="results-screen" class="screen">
+                <div class="results-card">
                     <h2>Campaign Results</h2>
                     <div class="metrics-grid"></div>
                     <div class="feedback-message"></div>
-                    <button class="fb-button" onclick="continueCampaign()">Next Campaign</button>
+                    <button class="btn-primary" onclick="continueCampaign()">Next Campaign</button>
                 </div>
-            </div>
-        </div>
+            </section>
+        </main>
     </div>
 
-    <script src="auth.js"></script>
     <script src="game.js"></script>
 </body>
 </html>
