@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facebook Ads Simulator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Game Container -->
+    <div class="game-container">
+        <!-- Header Component -->
+        <header class="game-header">
+            <div class="status-bar">
+                <div class="status-item">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="budget-progress"></div>
+                    </div>
+                    <span>$<span id="current-budget">100.00</span></span>
+                </div>
+                <div class="status-item">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="leads-progress"></div>
+                    </div>
+                    <span>Leads: <span id="current-leads">0</span>/50</span>
+                </div>
+                <div class="status-item">Day: <span id="current-day">1</span></div>
+            </div>
+        </header>
+
+        <!-- Screen Components -->
+        <main class="game-screens">
+            <!-- Task Screen -->
+            <section id="task-screen" class="screen active">
+                <div class="task-card">
+                    <h2>📌 Current Objective</h2>
+                    <p>Generate 50 leads within 7 days</p>
+                    <button class="btn-primary" onclick="startGame()">Start Campaign</button>
+                </div>
+            </section>
+
+            <!-- Campaign Setup Screen -->
+            <section id="campaign-screen" class="screen">
+                <div class="campaign-flow"></div>
+            </section>
+
+            <!-- Results Screen -->
+            <section id="results-screen" class="screen">
+                <div class="results-card">
+                    <h2>Campaign Results</h2>
+                    <div class="metrics-grid"></div>
+                    <div class="feedback-message"></div>
+                    <button class="btn-primary" onclick="continueCampaign()">Next Campaign</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
